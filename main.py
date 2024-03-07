@@ -5,6 +5,9 @@ import data
 
 def main():
     # import data from files
+    packages = data.loadPackageData()
+    addresses = data.loadAddressData()
+    distanceTable = data.loadDistanceData()
     
     # create hash table
 
