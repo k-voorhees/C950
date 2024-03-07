@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import math
 from package import Package
 
 
@@ -22,3 +23,13 @@ def loadPackageData():
         packages.append(Package(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
 
     return packages
+
+def loadAddressData():
+    # returns a list of tuples of (address, index)
+    data = pd.read_excel('./distance_table.xlsx', skiprows=7)
+
+    addressData = []
+
+    for row in data.itertuples():
+        addressData.append((row[1].split("\n")[1].strip(), row.Index))
+    return addressData
