@@ -1,4 +1,6 @@
 from package import Package, Status
+from hash import HashTable
+import data
 
 
 def main():
