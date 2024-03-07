@@ -33,3 +33,34 @@ def loadAddressData():
     for row in data.itertuples():
         addressData.append((row[1].split("\n")[1].strip(), row.Index))
     return addressData
+
+def loadDistanceData():
+    # returns a distance matrix
+    data = pd.read_excel('./distance_table.xlsx', skiprows=7)
+
+    addressData = loadAddressData()
+
+    matrix_length = len(addressData)
+    matrix = [] * matrix_length
+
+    for row in data.itertuples():
+        a = []
+        for col in range(3,30):
+            a.append(float(row[col]))
+        matrix.append(a)
+
+    for row in range(matrix_length):
+        for col in range(matrix_length):
+            if math.isnan(matrix[row][col]):
+                matrix[row][col] = matrix[col][row]
+
+    # ***********
+    # print function to display matrix
+    # ***********
+                
+    # for row in range(matrix_length):
+    #     for col in range(matrix_length):
+    #         print(str(matrix[row][col])+ "\t", end=" ")
+    #     print()
+
+    return matrix
