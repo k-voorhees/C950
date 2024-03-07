@@ -1,6 +1,9 @@
+from package import Package, Status
+
+
 def main():
     # import data from files
-
+    
     # create hash table
 
     # create Trucks
