@@ -34,12 +34,11 @@ def main():
     setAddressID(packages, addresses)
 
     # create hash table
-
+    
     # create Trucks
 
     # load truck
-
-    print(distanceBetween(3, 4, distanceTable))
+        
     # deliver packages
     pass
 
