@@ -33,8 +33,10 @@ def main():
     distanceTable = data.loadDistanceData()
     setAddressID(packages, addresses)
 
-    # create hash table
-    
+    # create and load hash table
+    hashTable = HashTable(len(addresses))
+    for package in packages:
+        hashTable.insert(package)
     # create Trucks
 
     # load truck
