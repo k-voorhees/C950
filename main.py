@@ -22,12 +22,15 @@ def setAddressID(packages, addresses):
                 package.addressID = addresses.index(address)
                 break
 
+def distanceBetween(address1, address2, table):
+    return table[address1][address2]
+
+
 def main():
     # import data from files
     packages = data.loadPackageData()
     addresses = data.loadAddressData()
     distanceTable = data.loadDistanceData()
-    
     setAddressID(packages, addresses)
 
     # create hash table
@@ -36,6 +39,7 @@ def main():
 
     # load truck
 
+    print(distanceBetween(3, 4, distanceTable))
     # deliver packages
     pass
 
