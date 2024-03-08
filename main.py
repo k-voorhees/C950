@@ -22,9 +22,9 @@ def main():
     
     # set the addressID for each package
     for package in packages:
-        for idx, address in enumerate(addresses):
-            if package.address.strip() == address[0].strip():
-                package.addressID = idx
+        for address in addresses:
+            if package.address == address:
+                package.addressID = addresses.index(address)
                 break
 
     # create hash table

@@ -31,7 +31,7 @@ def loadAddressData():
     addressData = []
 
     for row in data.itertuples():
-        addressData.append((row[1].split("\n")[1].strip(), row.Index))
+        addressData.append(row[1].split("\n")[1].strip())
     return addressData
 
 def loadDistanceData():
