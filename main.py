@@ -14,18 +14,21 @@ def nearestNeighbor(rowNum, table):
     # returns a tuple -> address, and the distance to it.
     return (address, nearest)
 
+def setAddressID(packages, addresses):
+# set the addressID for each package
+    for package in packages:
+        for address in addresses:
+            if package.address == address:
+                package.addressID = addresses.index(address)
+                break
+
 def main():
     # import data from files
     packages = data.loadPackageData()
     addresses = data.loadAddressData()
     distanceTable = data.loadDistanceData()
     
-    # set the addressID for each package
-    for package in packages:
-        for address in addresses:
-            if package.address == address:
-                package.addressID = addresses.index(address)
-                break
+    setAddressID(packages, addresses)
 
     # create hash table
 
