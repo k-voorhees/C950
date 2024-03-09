@@ -7,13 +7,10 @@ import datetime
 def nearestNeighbor(rowNum, table):
     # pointer to the row we are working with
     row = table[rowNum]
-    # get the distance of closest neighbor
-    nearest = min(i for i in row if i > 0)
-    # get the index of closest neighbor
-    address = row.index(nearest)
-    
-    # returns a tuple -> address, and the distance to it.
-    return (address, nearest)
+    # get of closest neighbor
+    nearest = row.index(min(i for i in row if i > 0))
+
+    return nearest
 
 def setAddressID(packages, addresses):
 # set the addressID for each package
@@ -33,9 +30,10 @@ def setStatus(packages):
 
 def setPriority(packages):
     for package in packages:
-        if package.deadline is datetime.time(9,0):
+        print(package.deadline)
+        if package.deadline == datetime.datetime(1900, 1, 3, 9, 0):
             package.Priority = Priority.FIRST
-        elif package.deadline is datetime.time(10,30):
+        elif package.deadline == datetime.datetime(1900, 1, 3, 10, 30):
             package.Priority = Priority.SECOND
 
 def main():
