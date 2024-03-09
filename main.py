@@ -25,6 +25,10 @@ def setAddressID(packages, addresses):
 def distanceBetween(address1, address2, table):
     return table[address1][address2]
 
+def setStatus(packages):
+    for package in packages:
+        if "Delayed" in package.note:
+            package.status = Status.DELAYED
 
 def main():
     # import data from files
@@ -32,6 +36,7 @@ def main():
     addresses = data.loadAddressData()
     distanceTable = data.loadDistanceData()
     setAddressID(packages, addresses)
+    setStatus(packages)
 
     # create and load hash table
     hashTable = HashTable(len(addresses))
