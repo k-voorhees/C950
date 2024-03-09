@@ -1,6 +1,7 @@
-from package import Package, Status
+from package import Package, Status, Priority
 from hash import HashTable
 import data
+import datetime
 
 
 def nearestNeighbor(rowNum, table):
@@ -30,6 +31,13 @@ def setStatus(packages):
         if "Delayed" in package.note:
             package.status = Status.DELAYED
 
+def setPriority(packages):
+    for package in packages:
+        if package.deadline is datetime.time(9,0):
+            package.Priority = Priority.FIRST
+        elif package.deadline is datetime.time(10,30):
+            package.Priority = Priority.SECOND
+
 def main():
     # import data from files
     packages = data.loadPackageData()
@@ -37,6 +45,7 @@ def main():
     distanceTable = data.loadDistanceData()
     setAddressID(packages, addresses)
     setStatus(packages)
+    setPriority(packages)
 
     # create and load hash table
     hashTable = HashTable(len(addresses))
