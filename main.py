@@ -38,17 +38,12 @@ def setPriority(packages):
 
 def load(truck, table):
     i = 1
-    while truck.hasRoom():
-        bucket = table.buckets[i]
-        node = bucket
-        while node is not None:
-            currentPackage = node.value
-            if currentPackage.status is Status.AT_HUB:
-                truck.load(currentPackage)
-            
-            node = node.next
-        i += 1
-
+    while truck.availableSpace() > 0:
+        bucket_list = table.buckets[i]
+        for package in bucket_list:
+            if truck.hasRoom():
+                truck.cargo.append(package)
+        i+=1
 
 def main():
     # import data from files
