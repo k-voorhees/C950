@@ -15,11 +15,21 @@ class HashTable:
 
         bucket_list.append(package)
 
+    def search(self, package):
+        bucket = self.hash(package.addressID)
+        bucket_list = self.buckets[bucket]
+
+        if package in bucket_list:
+            index = bucket_list.index(package)
+            return bucket_list[index]
+        else:
+            return None
+
     def delete(self, package):
         bucket = self.hash(package.addressID)
         bucket_list = self.buckets[bucket]
 
         if package in bucket_list:
             bucket_list.remove(package)
-
+            
     
