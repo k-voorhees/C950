@@ -36,10 +36,10 @@ def setPriority(packages):
         elif package.deadline == datetime.datetime(1900, 1, 3, 10, 30):
             package.Priority = Priority.SECOND
 
-def load(truck, table):
+def load(truck, hashtable):
     i = 1
     while truck.availableSpace() > 0:
-        bucket_list = table.buckets[i]
+        bucket_list = hashtable.buckets[i]
         for package in bucket_list:
             if truck.hasRoom():
                 truck.cargo.append(package)
