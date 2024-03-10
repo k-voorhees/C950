@@ -64,12 +64,23 @@ def load(trucks, packages, table, distanceTable):
                 item.status = Status.EN_ROUTE
                 table.delete(table.search(item))
     
-    # neighbors = []
-    # for package in truck1.cargo:
-    #     neighbors.append(nearestNeighbor(package.addressID,distanceTable))
+    neighbors = []  # list of addressIDs
+    for package in truck1.cargo:
+        neighbors.append(nearestNeighbor(package.addressID,distanceTable))
+
+    while truck1.hasRoom():
+        for neighbor in neighbors:
+            bucket = table.hash(neighbor)
+            bucket_list = table.buckets[bucket]
+            for item in bucket_list:
+                if item.status is Status.AT_HUB and item not in requires_truck_2:
+                    truck1.load(table.search(item))
+                    item.status = Status.EN_ROUTE
+                    table.delete(table.search(item))
+
     
 
-
+# for each package in cargo[] load the nearest neighbor
 
     
     pass
