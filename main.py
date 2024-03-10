@@ -5,9 +5,9 @@ import data
 import datetime
 
 
-def nearestNeighbor(rowNum, table):
+def nearestNeighbor(num, distanceTable):
     # pointer to the row we are working with
-    row = table[rowNum]
+    row = distanceTable[num]
     # get of closest neighbor
     nearest = row.index(min(i for i in row if i > 0))
 
@@ -36,17 +36,47 @@ def setPriority(packages):
         elif package.deadline == datetime.datetime(1900, 1, 3, 10, 30):
             package.Priority = Priority.SECOND
 
-def load(truck, hashTable):
-    i = 1
-    while truck.availableSpace() > 0:
-        bucket_list = hashTable.buckets[i]
-        for package in bucket_list:
-            if truck.hasRoom():
-                truck.cargo.append(package)
-        i+=1
+def load(trucks, packages, table, distanceTable):
+# MANUALLY LOAD PACKAGES BASED ON RESTRICTIONS. 
+# NEAREST NEIGHBOR WILL BE USED IN DELIVERY FUNCTION LATER
+    requires_truck_2 = [packages[2], packages[17], packages[35], packages[37]]
+    required_together = [packages[12],packages[13],packages[14],packages[15],packages[18],packages[19]]
+# DELAYED PACKAGES WILL BE UPDATED VIA FUNCTION ONCE TIME HITS 9:05 LATER IN PROGRAM
+# PACKAGE 9 - WRONG ADDRESS WILL BE UPDATED LIKE OTHER DELAYED PACKAGES ONCE TIME HITS 10:20
+    truck1, truck2, truck3 = trucks[0], trucks[1], trucks[2]
+
+    #   TRUCK 1
+    # package 15 is first priority. is also in required_together, so load all of those first
+    for package in required_together:
+        # # load the required package
+        if package.status is Status.AT_HUB:
+            truck1.load(table.search(package))      # load the package onto the truck
+            package.status = Status.EN_ROUTE        # update Status
+            table.delete(table.search(package))     # delete from hash table once loaded
     
-    for package in truck.cargo:
-        hashTable.delete(package)
+    # load all of the packages that are also located at the same stops as in required_together[]
+    for package in truck1.cargo:
+        bucket = table.hash(package.addressID)
+        bucket_list = table.buckets[bucket]
+        for item in bucket_list:
+            if item.status is Status.AT_HUB and item not in requires_truck_2:
+                truck1.load(table.search(item))
+                item.status = Status.EN_ROUTE
+                table.delete(table.search(item))
+    
+    # neighbors = []
+    # for package in truck1.cargo:
+    #     neighbors.append(nearestNeighbor(package.addressID,distanceTable))
+    
+
+
+
+    
+    pass
+
+
+    
+
 
 def main():
     # import data from files
@@ -63,9 +93,13 @@ def main():
         hashTable.insert(package)
     # create Trucks
     Truck1 = Truck(1)
+    Truck2 = Truck(2)
+    Truck3 = Truck(3)
+
+    TruckList = [Truck1, Truck2, Truck3]
 
     # load truck
-    load(Truck1, hashTable)
+    load(TruckList, packages, hashTable, distanceTable)
     
     # deliver packages
     pass
