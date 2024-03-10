@@ -36,14 +36,17 @@ def setPriority(packages):
         elif package.deadline == datetime.datetime(1900, 1, 3, 10, 30):
             package.Priority = Priority.SECOND
 
-def load(truck, hashtable):
+def load(truck, hashTable):
     i = 1
     while truck.availableSpace() > 0:
-        bucket_list = hashtable.buckets[i]
+        bucket_list = hashTable.buckets[i]
         for package in bucket_list:
             if truck.hasRoom():
                 truck.cargo.append(package)
         i+=1
+    
+    for package in truck.cargo:
+        hashTable.delete(package)
 
 def main():
     # import data from files
@@ -63,8 +66,7 @@ def main():
 
     # load truck
     load(Truck1, hashTable)
-    for package in Truck1.cargo:
-        hashTable.delete(package)
+    
     # deliver packages
     pass
 
