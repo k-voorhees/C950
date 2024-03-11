@@ -102,14 +102,34 @@ def deliverPackages(truck, dtable):
     # update odometer
     # drop off all packages at stop
     # repeat
-    truckStops = set({}) # list of all stops truck has to make
-    for package in truck.cargo:
-        truckStops.add(package.addressID)
-
     startingLocation = 0    # addressID of HUB on DistanceTable
     currentLocation = startingLocation
-    while len(truck.cargo) > 0:
-        nextStop = nearestNeighbor(currentLocation, dtable)
+    stops = [] # list of all stops truck has to make
+    for package in truck.cargo:
+            if package.addressID not in stops:
+                stops.append(package.addressID)
+
+    while stops:
+        distances = []
+        for stop in stops:
+            distances.append(distanceBetween(currentLocation, stop, dtable))
+
+        nextStop = stops[distances.index(min(distances))]
+
+        truck.odometer+=distanceBetween(currentLocation, nextStop, dtable)
+        currentLocation = nextStop
+        # deliver all pacakges at currentLocation
+        for i in range(len(truck.cargo)):
+            package = truck.cargo[i]
+            if package is not None and package.addressID is currentLocation:
+                package.status = Status.DELIVERED
+                package.deliveryTime = datetime.time()
+                truck.cargo[i] = None
+
+        stops.remove(currentLocation)
+        # repeat
+
+    pass
 
 
 
