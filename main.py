@@ -1,4 +1,4 @@
-from package import Package, Status, Priority
+from package import Package, Status
 from hash import HashTable
 from truck import Truck
 import data
@@ -28,13 +28,6 @@ def setStatus(packages):
     for package in packages:
         if "Delayed" in package.note:
             package.status = Status.DELAYED
-
-def setPriority(packages):
-    for package in packages:
-        if package.deadline == datetime.datetime(1900, 1, 3, 9, 0):
-            package.Priority = Priority.FIRST
-        elif package.deadline == datetime.datetime(1900, 1, 3, 10, 30):
-            package.Priority = Priority.SECOND
 
 def manualLoadRestricted(trucks, packages, table):
 # MANUALLY LOAD PACKAGES BASED ON RESTRICTIONS. 
@@ -107,7 +100,6 @@ def main():
     distanceTable = data.loadDistanceData()
     setAddressID(packages, addresses)
     setStatus(packages)
-    setPriority(packages)
 
     # create and load hash table
     hashTable = HashTable(len(addresses))

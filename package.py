@@ -15,7 +15,6 @@ class Package:
         self.addressID = None
         self.status = Status.AT_HUB
         self.deliveryTime = datetime.time(0)
-        self.Priority = Priority.NONE
     
     def __str__(self):
         PackageToString = f"Package ID: {self.id}\nAddress ID: {self.addressID}\nAddress: {self.address}\nCity: {self.city}\nState: {self.state}\nZip Code: {self.zip}\nDeadline: {self.deadline}\nWeight: {self.weight}\nDelivery Status: {self.status}\nTime of Delivery: {self.deliveryTime}\n"
@@ -27,8 +26,3 @@ class Status(Enum):
     EN_ROUTE = 2
     DELIVERED = 3
     DELAYED = 4
-
-class Priority(Enum):
-    FIRST = 1
-    SECOND = 2
-    NONE = 3
