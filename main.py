@@ -96,40 +96,44 @@ def cleanUpHashTable(truck, table):
 
 
 def deliverPackages(truck, dtable):
-    # starting location is HUB
-    # find closest package drop off point
-    # move there
-    # update odometer
-    # drop off all packages at stop
-    # repeat
-    startingLocation = 0    # addressID of HUB on DistanceTable
+    startingLocation = 0    # ADDRESSID OF HUB ON DISTANCE TABLE
     currentLocation = startingLocation
-    stops = [] # list of all stops truck has to make
+
+    # LIST OF STOPS TRUCK HAS TO MAKE
+    stops = [] 
     for package in truck.cargo:
             if package.addressID not in stops:
                 stops.append(package.addressID)
 
+    # IMPLEMENT NEAREST NEIGHBOR TO DELIVER ALL PACKAGES
     while stops:
+        # NEW LIST OF DISTANCES FROM CURRENT LOCATION
         distances = []
         for stop in stops:
             distances.append(distanceBetween(currentLocation, stop, dtable))
 
+        # NEXT STOP WILL BE THE CLOSEST ADDRESS OF ALL DROP OFF POINTS
         nextStop = stops[distances.index(min(distances))]
 
+        # INCREASE TRUCK MILAGE
         truck.odometer+=distanceBetween(currentLocation, nextStop, dtable)
+        # "TRAVEL" TO THE NEXT STOP
         currentLocation = nextStop
-        # deliver all pacakges at currentLocation
+        # DELIVER ALL PACKAGES AT THAT LOCATION
         for i in range(len(truck.cargo)):
             package = truck.cargo[i]
             if package is not None and package.addressID is currentLocation:
-                package.status = Status.DELIVERED
-                package.deliveryTime = datetime.time()
+                package.status = Status.DELIVERED           # UPDATE DELIVERY STATUS
+                package.deliveryTime = datetime.time()      # UPDATE DELIVERY TIME
                 truck.cargo[i] = None
 
+        # REMOVE CURRENT LOCATION FROM LIST OF STOPS
         stops.remove(currentLocation)
-        # repeat
-
-    pass
+    
+    # RETURN TO STATION
+    truck.odometer+=(distanceBetween(currentLocation, startingLocation, dtable))
+    currentLocation = startingLocation
+        
 
 
 
