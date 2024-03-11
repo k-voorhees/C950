@@ -36,7 +36,7 @@ def setPriority(packages):
         elif package.deadline == datetime.datetime(1900, 1, 3, 10, 30):
             package.Priority = Priority.SECOND
 
-def load(trucks, packages, table, distanceTable):
+def manualLoadRestricted(trucks, packages, table):
 # MANUALLY LOAD PACKAGES BASED ON RESTRICTIONS. 
 # NEAREST NEIGHBOR WILL BE USED IN DELIVERY FUNCTION LATER
     requires_truck_2 = [packages[2], packages[17], packages[35], packages[37]]
@@ -69,6 +69,15 @@ def load(trucks, packages, table, distanceTable):
             truck2.load(table.search(package))
             package.status = Status.EN_ROUTE
             table.delete(table.search(package))
+    # load all of the packages that are also located at the same stops as in required_together[]
+    for package in truck2.cargo:
+        bucket = table.hash(package.addressID)
+        bucket_list = table.buckets[bucket]
+        for item in bucket_list:
+            if item.status is Status.AT_HUB:
+                truck2.load(table.search(item))
+                item.status = Status.EN_ROUTE
+                table.delete(table.search(item))
 
     
     
@@ -95,7 +104,7 @@ def main():
     TruckList = [Truck1, Truck2, Truck3]
 
     # load truck
-    load(TruckList, packages, hashTable, distanceTable)
+    manualLoadRestricted(TruckList, packages, hashTable)
     
     # deliver packages
     pass
