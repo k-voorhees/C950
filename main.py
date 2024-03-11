@@ -2,10 +2,11 @@ from package import Package, Status
 from hash import HashTable
 from truck import Truck
 import data
-import datetime
+from datetime import time, datetime, timedelta
 
 # set max speed of truck globally
 SPEED_OF_TRUCK = 18
+START_TIME =time(8,0,0)
 
 def nearestNeighbor(num, distanceTable):
     # pointer to the row we are working with
@@ -94,10 +95,19 @@ def cleanUpHashTable(truck, table):
     for package in truck.cargo:
         table.delete(table.search(package))
 
+def calculateTime(distance):
+    # calculate time based on distance and travel speed
+    time = (float(60 * (distance / SPEED_OF_TRUCK)))
+    time = str(round(time, 2))
+    timeT = str(time).split(".")
 
-def deliverPackages(truck, dtable):
+    # return tuple of (minutes, seconds)
+    return (int(timeT[0]), int(timeT[1])) 
+
+def deliverPackages(truck, dtable, time):
     startingLocation = 0    # ADDRESSID OF HUB ON DISTANCE TABLE
     currentLocation = startingLocation
+    currentTime = time
 
     # LIST OF STOPS TRUCK HAS TO MAKE
     stops = [] 
@@ -116,7 +126,14 @@ def deliverPackages(truck, dtable):
         nextStop = stops[distances.index(min(distances))]
 
         # INCREASE TRUCK MILAGE
-        truck.odometer+=distanceBetween(currentLocation, nextStop, dtable)
+        distanceTravelled = distanceBetween(currentLocation, nextStop, dtable)
+        truck.odometer+=distanceTravelled
+        travelTime = calculateTime(distanceTravelled)
+        td = timedelta(hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second)
+        td += timedelta(minutes=travelTime[0])  # increase minutes
+        td += timedelta(seconds=travelTime[1])  # increase seconds
+        currentTime = (datetime.min + td).time()
+
         # "TRAVEL" TO THE NEXT STOP
         currentLocation = nextStop
         # DELIVER ALL PACKAGES AT THAT LOCATION
@@ -124,7 +141,7 @@ def deliverPackages(truck, dtable):
             package = truck.cargo[i]
             if package is not None and package.addressID is currentLocation:
                 package.status = Status.DELIVERED           # UPDATE DELIVERY STATUS
-                package.deliveryTime = datetime.time()      # UPDATE DELIVERY TIME
+                package.deliveryTime = currentTime      # UPDATE DELIVERY TIME
                 truck.cargo[i] = None
 
         # REMOVE CURRENT LOCATION FROM LIST OF STOPS
@@ -166,7 +183,8 @@ def main():
 # AND WILL TAKE THE REMAINING PACKAGES
     
     # deliver packages
-    deliverPackages(Truck1, distanceTable)
+    currentTime = START_TIME
+    deliverPackages(Truck1, distanceTable, currentTime)
     pass
 
 if __name__ == "__main__":
