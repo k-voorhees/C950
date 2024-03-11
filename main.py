@@ -118,6 +118,8 @@ def main():
 # FILL THE EMPTY SPACE ON EACH TRUCK
     fillTruck(Truck1, hashTable)
     fillTruck(Truck2, hashTable)
+# TRUCK 3 WILL WAIT TO BE LOADED UNTIL ALL DELAYED PACKAGES ARE READY 
+# AND WILL TAKE THE REMAINING PACKAGES
     
     # deliver packages
     pass
