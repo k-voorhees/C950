@@ -26,10 +26,11 @@ class HashTable:
             return None
 
     def delete(self, package):
-        bucket = self.hash(package.addressID)
-        bucket_list = self.buckets[bucket]
+        if package is not None:
+            bucket = self.hash(package.addressID)
+            bucket_list = self.buckets[bucket]
 
-        if package in bucket_list:
-            bucket_list.remove(package)
+            if package in bucket_list:
+                bucket_list.remove(package)
             
     

@@ -52,7 +52,7 @@ def manualLoadRestricted(trucks, packages, table):
         if package.status is Status.AT_HUB:
             truck1.load(table.search(package))      # load the package onto the truck
             package.status = Status.EN_ROUTE        # update Status
-            table.delete(table.search(package))     # delete from hash table once loaded
+    cleanUpHashTable(truck1, table)
     
     # load all of the packages that are also located at the same stops as in required_together[]
     for package in truck1.cargo:
@@ -62,13 +62,14 @@ def manualLoadRestricted(trucks, packages, table):
             if item.status is Status.AT_HUB and item not in requires_truck_2:
                 truck1.load(table.search(item))
                 item.status = Status.EN_ROUTE
-                table.delete(table.search(item))
+    cleanUpHashTable(truck1, table)
     #   TRUCK 2
     for package in requires_truck_2:
         if package.status is Status.AT_HUB:
             truck2.load(table.search(package))
             package.status = Status.EN_ROUTE
-            table.delete(table.search(package))
+    cleanUpHashTable(truck1, table)
+    
     # load all of the packages that are also located at the same stops as in required_together[]
     for package in truck2.cargo:
         bucket = table.hash(package.addressID)
@@ -77,10 +78,26 @@ def manualLoadRestricted(trucks, packages, table):
             if item.status is Status.AT_HUB:
                 truck2.load(table.search(item))
                 item.status = Status.EN_ROUTE
-                table.delete(table.search(item))
+    
+    cleanUpHashTable(truck2, table)
 
+def fillTruck(truck, table):
+    # fills the remaining open space in the truck
+    i = 1
+    while truck.hasRoom():
+        bucket_list = table.buckets[i]
+        for package in bucket_list:
+            if truck.hasRoom():
+                truck.load(table.search(package))
+                package.status = Status.EN_ROUTE
+
+        i+=1
+    cleanUpHashTable(truck, table)
     
-    
+def cleanUpHashTable(truck, table):
+    # remove packages from hashtable that were loaded on truck
+    for package in truck.cargo:
+        table.delete(table.search(package))
 
 
 def main():
@@ -105,6 +122,9 @@ def main():
 
     # load truck
     manualLoadRestricted(TruckList, packages, hashTable)
+# PACKAGES LEFT IN HASH TABLE AT THIS POINT DO NOT HAVE A RESTRICTION OTHER THAN BEING DELAYED
+# FILL THE EMPTY SPACE ON EACH TRUCK
+    fillTruck(Truck1, hashTable)
     
     # deliver packages
     pass
