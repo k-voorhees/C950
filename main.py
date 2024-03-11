@@ -69,7 +69,7 @@ def manualLoadRestricted(trucks, packages, table):
             truck2.load(table.search(package))
             package.status = Status.EN_ROUTE
     cleanUpHashTable(truck1, table)
-    
+
     # load all of the packages that are also located at the same stops as in required_together[]
     for package in truck2.cargo:
         bucket = table.hash(package.addressID)
@@ -87,7 +87,7 @@ def fillTruck(truck, table):
     while truck.hasRoom():
         bucket_list = table.buckets[i]
         for package in bucket_list:
-            if truck.hasRoom():
+            if truck.hasRoom() and package.status is Status.AT_HUB:
                 truck.load(table.search(package))
                 package.status = Status.EN_ROUTE
 
@@ -125,6 +125,7 @@ def main():
 # PACKAGES LEFT IN HASH TABLE AT THIS POINT DO NOT HAVE A RESTRICTION OTHER THAN BEING DELAYED
 # FILL THE EMPTY SPACE ON EACH TRUCK
     fillTruck(Truck1, hashTable)
+    fillTruck(Truck2, hashTable)
     
     # deliver packages
     pass
