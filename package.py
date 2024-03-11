@@ -8,13 +8,18 @@ class Package:
         self.city = city
         self.state = state
         self.zip = zip
-        self.deadline = deadline
+        
         self.weight = weight
         self.note = note
         ##
         self.addressID = None
         self.status = Status.AT_HUB
         self.deliveryTime = datetime.time(0)
+
+        if type(deadline) is datetime.datetime:
+            self.deadline = deadline.time()
+        else:
+            self.deadline = datetime.time(23,59,59)
     
     def __str__(self):
         PackageToString = f"Package ID: {self.id}\nAddress ID: {self.addressID}\nAddress: {self.address}\nCity: {self.city}\nState: {self.state}\nZip Code: {self.zip}\nDeadline: {self.deadline}\nWeight: {self.weight}\nDelivery Status: {self.status}\nTime of Delivery: {self.deliveryTime}\n"
