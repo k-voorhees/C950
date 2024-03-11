@@ -142,6 +142,7 @@ def main():
 # AND WILL TAKE THE REMAINING PACKAGES
     
     # deliver packages
+    deliverPackages(Truck1, distanceTable)
     pass
 
 if __name__ == "__main__":
