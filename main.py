@@ -4,6 +4,8 @@ from truck import Truck
 import data
 import datetime
 
+# set max speed of truck globally
+SPEED_OF_TRUCK = 18
 
 def nearestNeighbor(num, distanceTable):
     # pointer to the row we are working with
@@ -91,6 +93,24 @@ def cleanUpHashTable(truck, table):
     # remove packages from hashtable that were loaded on truck
     for package in truck.cargo:
         table.delete(table.search(package))
+
+
+def deliverPackages(truck, dtable):
+    # starting location is HUB
+    # find closest package drop off point
+    # move there
+    # update odometer
+    # drop off all packages at stop
+    # repeat
+    truckStops = set({}) # list of all stops truck has to make
+    for package in truck.cargo:
+        truckStops.add(package.addressID)
+
+    startingLocation = 0    # addressID of HUB on DistanceTable
+    currentLocation = startingLocation
+    while len(truck.cargo) > 0:
+        nextStop = nearestNeighbor(currentLocation, dtable)
+
 
 
 def main():
