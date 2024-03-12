@@ -141,6 +141,7 @@ def deliverPackages(truck, dtable, time):
 
         # "TRAVEL" TO THE NEXT STOP
         currentLocation = nextStop
+        truck.location = currentLocation
         # DELIVER ALL PACKAGES AT THAT LOCATION
         for i in range(len(truck.cargo)):
             package = truck.cargo[i]
@@ -159,6 +160,7 @@ def deliverPackages(truck, dtable, time):
     currentTime = increaseTime(travelTime, currentTime)
     truck.clock = currentTime
     currentLocation = startingLocation
+    truck.location = currentLocation
         
 def updatePackage9(package, table):
     table.delete(table.search(package))
