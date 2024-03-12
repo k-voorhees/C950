@@ -1,9 +1,11 @@
 MAX_CAPACITY = 16
+from datetime import time
 
 class Truck:
     def __init__(self, id):
         self.id = id
         self.odometer = 0
+        self.clock = time(8,0,0)
         self.cargo = []
     
     def load(self, package):
