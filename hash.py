@@ -2,6 +2,7 @@ class HashTable:
     def __init__(self, size):
         self.size = size
         self.buckets = []
+        self.contents = 0
         for i in range(size):
             self.buckets.append([])
 
@@ -14,6 +15,7 @@ class HashTable:
         bucket_list = self.buckets[bucket]
 
         bucket_list.append(package)
+        self.contents+=1
 
     def search(self, package):
         bucket = self.hash(package.addressID)
@@ -32,5 +34,7 @@ class HashTable:
 
             if package in bucket_list:
                 bucket_list.remove(package)
+                self.contents-=1
+            
             
     
