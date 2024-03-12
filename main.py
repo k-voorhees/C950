@@ -137,6 +137,7 @@ def deliverPackages(truck, dtable, time):
         truck.odometer+=distanceTravelled
         travelTime = calculateTime(distanceTravelled)
         currentTime = increaseTime(travelTime, currentTime)
+        truck.clock = currentTime
 
         # "TRAVEL" TO THE NEXT STOP
         currentLocation = nextStop
@@ -153,6 +154,10 @@ def deliverPackages(truck, dtable, time):
     
     # RETURN TO STATION
     truck.odometer+=(distanceBetween(currentLocation, startingLocation, dtable))
+    distanceTravelled = distanceBetween(currentLocation, startingLocation, dtable)
+    travelTime = calculateTime(distanceTravelled)
+    currentTime = increaseTime(travelTime, currentTime)
+    truck.clock = currentTime
     currentLocation = startingLocation
         
 
@@ -188,16 +193,27 @@ def main():
     
     # deliver packages
     currentTime = START_TIME
+    while hashTable.contents > 0:
+        deliverPackages(Truck1, distanceTable, currentTime)
+        deliverPackages(Truck2, distanceTable, currentTime)
+
+
+        if currentTime > time(9,5,0):
+            # adjust status on delayed
+            for package in packages:
+                if package.status is Status.DELAYED and package.id != 9:    # package 9 delayed until 10:25
+                    package.status = Status.AT_HUB
+            fillTruck(Truck3, hashTable)
+
+
+
     deliverPackages(Truck1, distanceTable, currentTime)
     deliverPackages(Truck2, distanceTable, currentTime)
 
 
 # Time is 9:05 - load delayed packages on Truck3
     currentTime = time(9,5,0)
-    # adjust status on delayed
-    for package in packages:
-        if package.status is Status.DELAYED and package.id != 9:    # package 9 delayed until 10:25
-            package.status = Status.AT_HUB
+    
 
     fillTruck(Truck3, hashTable)
     deliverPackages(Truck3, distanceTable, currentTime)
