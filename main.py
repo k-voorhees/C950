@@ -29,8 +29,9 @@ def distanceBetween(address1, address2, table):
 
 def setStatus(packages):
     for package in packages:
-        if "Delayed" in package.note:
+        if "Delayed" in package.note or package.id == 9:
             package.status = Status.DELAYED
+
 
 def manualLoadRestricted(trucks, packages, table):
 # MANUALLY LOAD PACKAGES BASED ON RESTRICTIONS. 
@@ -80,7 +81,7 @@ def manualLoadRestricted(trucks, packages, table):
 def fillTruck(truck, table):
     # fills the remaining open space in the truck
     i = 1
-    while truck.hasRoom():
+    while i < table.size:
         bucket_list = table.buckets[i]
         for package in bucket_list:
             if truck.hasRoom() and package.status is Status.AT_HUB:
@@ -103,6 +104,12 @@ def calculateTime(distance):
 
     # return tuple of (minutes, seconds)
     return (int(timeT[0]), int(timeT[1])) 
+
+def increaseTime(travelTime, currentTime):
+    td = timedelta(hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second)
+    td += timedelta(minutes=travelTime[0])  # increase minutes
+    td += timedelta(seconds=travelTime[1])  # increase seconds
+    return (datetime.min + td).time()
 
 def deliverPackages(truck, dtable, time):
     startingLocation = 0    # ADDRESSID OF HUB ON DISTANCE TABLE
@@ -129,10 +136,7 @@ def deliverPackages(truck, dtable, time):
         distanceTravelled = distanceBetween(currentLocation, nextStop, dtable)
         truck.odometer+=distanceTravelled
         travelTime = calculateTime(distanceTravelled)
-        td = timedelta(hours=currentTime.hour, minutes=currentTime.minute, seconds=currentTime.second)
-        td += timedelta(minutes=travelTime[0])  # increase minutes
-        td += timedelta(seconds=travelTime[1])  # increase seconds
-        currentTime = (datetime.min + td).time()
+        currentTime = increaseTime(travelTime, currentTime)
 
         # "TRAVEL" TO THE NEXT STOP
         currentLocation = nextStop
@@ -185,6 +189,18 @@ def main():
     # deliver packages
     currentTime = START_TIME
     deliverPackages(Truck1, distanceTable, currentTime)
+    deliverPackages(Truck2, distanceTable, currentTime)
+
+
+# Time is 9:05 - load delayed packages on Truck3
+    currentTime = time(9,5,0)
+    # adjust status on delayed
+    for package in packages:
+        if package.status is Status.DELAYED and package.id != 9:    # package 9 delayed until 10:25
+            package.status = Status.AT_HUB
+
+    fillTruck(Truck3, hashTable)
+    deliverPackages(Truck3, distanceTable, currentTime)
     pass
 
 if __name__ == "__main__":
