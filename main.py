@@ -160,8 +160,15 @@ def deliverPackages(truck, dtable, time):
     truck.clock = currentTime
     currentLocation = startingLocation
         
-
-
+def updatePackage9(package, table):
+    table.delete(table.search(package))
+    package.address = "410 S State St"
+    package.city = "Salt Lake City"
+    package.state = "UT"
+    package.zip = 84111
+    package.status = Status.AT_HUB
+    package.addressID = 19
+    table.insert(package)
 
 def main():
     # import data from files
@@ -186,37 +193,30 @@ def main():
     manualLoadRestricted(TruckList, packages, hashTable)
 # PACKAGES LEFT IN HASH TABLE AT THIS POINT DO NOT HAVE A RESTRICTION OTHER THAN BEING DELAYED
 # FILL THE EMPTY SPACE ON EACH TRUCK
-    fillTruck(Truck1, hashTable)
-    fillTruck(Truck2, hashTable)
+    
 # TRUCK 3 WILL WAIT TO BE LOADED UNTIL ALL DELAYED PACKAGES ARE READY 
 # AND WILL TAKE THE REMAINING PACKAGES
     
     # deliver packages
     currentTime = START_TIME
     while hashTable.contents > 0:
-        deliverPackages(Truck1, distanceTable, currentTime)
-        deliverPackages(Truck2, distanceTable, currentTime)
+        fillTruck(Truck1, hashTable)
+        fillTruck(Truck2, hashTable)
+        for truck in TruckList:
+            if truck.cargo:
+                deliverPackages(truck, distanceTable, currentTime)
+                currentTime = truck.clock
 
+                if currentTime > time(10,25,0):
+                    updatePackage9(packages[8], hashTable)
 
-        if currentTime > time(9,5,0):
-            # adjust status on delayed
-            for package in packages:
-                if package.status is Status.DELAYED and package.id != 9:    # package 9 delayed until 10:25
-                    package.status = Status.AT_HUB
-            fillTruck(Truck3, hashTable)
-
-
-
-    deliverPackages(Truck1, distanceTable, currentTime)
-    deliverPackages(Truck2, distanceTable, currentTime)
-
-
-# Time is 9:05 - load delayed packages on Truck3
-    currentTime = time(9,5,0)
-    
-
-    fillTruck(Truck3, hashTable)
-    deliverPackages(Truck3, distanceTable, currentTime)
+                if currentTime > time(9,5,0):
+                    # adjust status on delayed
+                    for package in packages:
+                        if package.status is Status.DELAYED and package.id != 9:    # package 9 delayed until 10:25
+                            package.status = Status.AT_HUB
+        fillTruck(Truck3, hashTable)
+                    
     pass
 
 if __name__ == "__main__":
