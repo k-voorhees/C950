@@ -10,6 +10,9 @@ class HashTable:
         return value % self.size
 
     def insert(self, package):
+        if package is None:
+            return None
+        
         bucket = self.hash(package.addressID)
 
         bucket_list = self.buckets[bucket]
@@ -18,6 +21,9 @@ class HashTable:
         self.contents+=1
 
     def search(self, package):
+        if package is None:
+            return None
+        
         bucket = self.hash(package.addressID)
         bucket_list = self.buckets[bucket]
 

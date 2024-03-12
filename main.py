@@ -161,6 +161,7 @@ def deliverPackages(truck, dtable, time):
     truck.clock = currentTime
     currentLocation = startingLocation
     truck.location = currentLocation
+    truck.cargo = []    # EMPTY TRUCK CARGO LIST
         
 def updatePackage9(package, table):
     table.delete(table.search(package))
@@ -238,7 +239,15 @@ def main():
     currentTime = time(10,25,0)
     updatePackage9(packages[8], hashTable)
 
-# FIND TRUCK THAT IS BACK TO HUB FIRST
+# FIGURE OUT WHICH TRUCK CAN TAKE LAST PACKAGE
+    while hashTable.contents > 0:
+        for truck in TruckList:
+            if truck.clock <= time(10,25,0) and truck.location == 0:
+                fillTruck(truck, hashTable)
+                truck.clock = time(10,25,0)
+                if truck.cargo:
+                    deliverPackages(truck, distanceTable, truck.clock)
+
     
                     
     pass
