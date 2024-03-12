@@ -189,33 +189,55 @@ def main():
 
     TruckList = [Truck1, Truck2, Truck3]
 
-    # load truck
+# START AT 8:00
+    currentTime = START_TIME
+    
+# MANUALLY LOAD TRUCKS ACCORDING TO RESTRICTIONS
     manualLoadRestricted(TruckList, packages, hashTable)
+
 # PACKAGES LEFT IN HASH TABLE AT THIS POINT DO NOT HAVE A RESTRICTION OTHER THAN BEING DELAYED
 # FILL THE EMPTY SPACE ON EACH TRUCK
+    fillTruck(Truck1, hashTable)
+    fillTruck(Truck2, hashTable)
     
-# TRUCK 3 WILL WAIT TO BE LOADED UNTIL ALL DELAYED PACKAGES ARE READY 
-# AND WILL TAKE THE REMAINING PACKAGES
+# TRUCK 3 WILL WAIT TO BE LOADED UNTIL 9:05 AND WILL TAKE THE DELAYED PACKAGES
+
+# DELIVER FIRST PACKAGES
+# TRUCK 1 AND 2 LEAVE HUB AT 8:00
+    # TRUCK.CLOCK WILL TRACK THE TIME OF DAY FOR EACH TRUCK
+    deliverPackages(Truck1, distanceTable, currentTime)
+    deliverPackages(Truck2, distanceTable, currentTime)
+    # TRUCKS RETURN TO HUB AFTER DELIVERY
     
-    # deliver packages
-    currentTime = START_TIME
-    while hashTable.contents > 0:
-        fillTruck(Truck1, hashTable)
-        fillTruck(Truck2, hashTable)
-        for truck in TruckList:
-            if truck.cargo:
-                deliverPackages(truck, distanceTable, currentTime)
-                currentTime = truck.clock
+# TIME HITS 9:05 WHILE THEY ARE DELIVERING
+# UPDATE DELAYED PACKAGES
+    currentTime = time(9,5,0)
+    for package in packages:
+        if package.status is Status.DELAYED and package.id != 9:    # package 9 delayed until 10:25
+            package.status = Status.AT_HUB
 
-                if currentTime > time(10,25,0):
-                    updatePackage9(packages[8], hashTable)
+# LOAD TRUCK 3 WITH REMAINING PACKAGES
+# ONLY PACKAGE 9 WILL BE LEFT IN HASHTABLE
+    fillTruck(Truck3, hashTable)
 
-                if currentTime > time(9,5,0):
-                    # adjust status on delayed
-                    for package in packages:
-                        if package.status is Status.DELAYED and package.id != 9:    # package 9 delayed until 10:25
-                            package.status = Status.AT_HUB
-        fillTruck(Truck3, hashTable)
+# TRUCK 3 MUST WAIT FOR 1 OTHER TRUCK TO ARRIVE BACK AT HUB
+    returnTimes = [Truck1.clock, Truck2.clock]
+    firstBack = min(returnTimes)
+    if firstBack < time(9,5,0):
+        Truck3.clock = time(9,5,0)
+    else:
+        Truck3.clock = firstBack
+
+# TRUCK 3 DEPARTS - ONLY TRUCK ON ROAD AT THIS POINT
+    deliverPackages(Truck3, distanceTable, Truck3.clock)
+
+# TIME HITS 10:25
+# PACKAGE 9 GETS THE CORRECT ADDRESS
+    currentTime = time(10,25,0)
+    updatePackage9(packages[8], hashTable)
+
+# FIND TRUCK THAT IS BACK TO HUB FIRST
+    
                     
     pass
 
