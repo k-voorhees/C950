@@ -14,6 +14,7 @@ class Package:
         ##
         self.addressID = None
         self.status = Status.AT_HUB
+        self.departTime = datetime.time(0)
         self.deliveryTime = datetime.time(0)
 
         if type(deadline) is datetime.datetime:

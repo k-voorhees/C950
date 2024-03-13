@@ -34,6 +34,7 @@ def manualLoadRestricted(trucks, packages, table):
         if package.status is Status.AT_HUB:
             truck1.load(table.search(package))      # load the package onto the truck
             package.status = Status.EN_ROUTE        # update Status
+            package.departTime = (START_TIME)
     cleanUpHashTable(truck1, table)
     
     # load all of the packages that are also located at the same stops as in required_together[]
@@ -44,6 +45,8 @@ def manualLoadRestricted(trucks, packages, table):
             if item.status is Status.AT_HUB and item not in requires_truck_2:
                 truck1.load(table.search(item))
                 item.status = Status.EN_ROUTE
+                item.departTime = (START_TIME)
+
     cleanUpHashTable(truck1, table)
 
 #   TRUCK 2
@@ -51,6 +54,7 @@ def manualLoadRestricted(trucks, packages, table):
         if package.status is Status.AT_HUB:
             truck2.load(table.search(package))
             package.status = Status.EN_ROUTE
+            package.departTime = (START_TIME)
     cleanUpHashTable(truck1, table)
 
     # load all of the packages that are also located at the same stops as in required_together[]
@@ -61,6 +65,7 @@ def manualLoadRestricted(trucks, packages, table):
             if item.status is Status.AT_HUB:
                 truck2.load(table.search(item))
                 item.status = Status.EN_ROUTE
+                item.departTime = START_TIME
     
     cleanUpHashTable(truck2, table)
 
@@ -73,6 +78,7 @@ def fillTruck(truck, table):
             if truck.hasRoom() and package.status is Status.AT_HUB:
                 truck.load(table.search(package))
                 package.status = Status.EN_ROUTE
+                package.departTime = truck.clock
 
         i+=1
     cleanUpHashTable(truck, table)
@@ -164,18 +170,25 @@ def updatePackage9(package, table):
     table.insert(package)
 
 
-# for package in packages:
-#     if package.departTime > time:
-#         package is still at hub
-#     elif package.departTime <= time and package.deliveryTime > time:
-#         package is in transit
-#     elif package.deliveryTime < time:
-#         package is delivered
+    
+def packageStats(time, packages):
+    # print out the current stats of the packages based on the time passed in
+    for package in packages:
+        if package.departTime > time:
+            # package still at hub
+            print(f"Package: {package.id}\tStatus: AT_HUB")
+        elif package.departTime < time and time < package.deliveryTime:
+            # package en route
+            print(f"Package: {package.id}\tStatus: EN_ROUTE")
+        elif time > package.deliveryTime:
+            # package delivered already
+            print(f"Package: {package.id}\tStatus: DELIVERED\tDelivery Time: {package.deliveryTime}")
+
+    pass
 
 def printStats(trucklist):
     mileage = trucklist[0].odometer+trucklist[1].odometer+trucklist[2].odometer
     print(f"PACKAGES DELIVERED:\t{PACKAGES_DELIVERED}")
-    print(f"TIME COMPLETED:\t\t{TIME_COMPLETED}")
     print(f"TRUCK 1 ODOMETER:\t{trucklist[0].odometer}")
     print(f"TRUCK 2 ODOMETER:\t{trucklist[1].odometer}")
     print(f"TRUCK 3 ODOMETER:\t{trucklist[2].odometer}")
@@ -267,20 +280,24 @@ def main():
                     deliverPackages(truck, distanceTable, truck.clock)
                     TIME_COMPLETED=truck.clock
 
-# DISPLAY COMPLETION RESULTS
-    
-
-    print("Make a selection: \n")
-    print("1. Locate Single Package")
-    print("2. Display All Package Info")
-    print("3. Display statistics")
-    print("4. QUIT")
-    selection = input()
-    while selection is not "4":
+# DISPLAY MENU
+    while True:
+        print("Make a selection: \n")
+        print("1. Locate Single Package")
+        print("2. Display All Package Info")
+        print("3. Display statistics")
+        print("4. QUIT")
+        selection = int(input())
         if selection == 1:
-            singlePackage()
+            packageToSearch = input("Enter Package ID: ")
+            print(packages[int(packageToSearch) - 1])
         elif selection == 2:
-            displayAll()
+            t = input("Enter time in format HH:MM:SS: ")
+            t = t.split(':')
+            t = timedelta(hours=float(t[0]), minutes=float(t[1]), seconds=float(t[2]))
+            t = (datetime.min + t).time()
+            print(t)
+            packageStats(t, packages)
         elif selection == 3:
             printStats(TruckList)
         elif selection == 4:
