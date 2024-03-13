@@ -163,6 +163,24 @@ def updatePackage9(package, table):
     package.addressID = 19
     table.insert(package)
 
+
+# for package in packages:
+#     if package.departTime > time:
+#         package is still at hub
+#     elif package.departTime <= time and package.deliveryTime > time:
+#         package is in transit
+#     elif package.deliveryTime < time:
+#         package is delivered
+
+def printStats(trucklist):
+    mileage = trucklist[0].odometer+trucklist[1].odometer+trucklist[2].odometer
+    print(f"PACKAGES DELIVERED:\t{PACKAGES_DELIVERED}")
+    print(f"TIME COMPLETED:\t\t{TIME_COMPLETED}")
+    print(f"TRUCK 1 ODOMETER:\t{trucklist[0].odometer}")
+    print(f"TRUCK 2 ODOMETER:\t{trucklist[1].odometer}")
+    print(f"TRUCK 3 ODOMETER:\t{trucklist[2].odometer}")
+    print(f"TOTAL MILEAGE:\t\t{mileage}")
+
 def main():
 # IMPORT DATA FROM FILES
     packages = data.loadPackageData()
@@ -250,13 +268,7 @@ def main():
                     TIME_COMPLETED=truck.clock
 
 # DISPLAY COMPLETION RESULTS
-    mileage = Truck1.odometer+Truck2.odometer+Truck2.odometer
-    print(f"PACKAGES DELIVERED:\t{PACKAGES_DELIVERED}")
-    print(f"TIME COMPLETED:\t\t{TIME_COMPLETED}")
-    print(f"TRUCK 1 ODOMETER:\t{Truck1.odometer}")
-    print(f"TRUCK 2 ODOMETER:\t{Truck2.odometer}")
-    print(f"TRUCK 3 ODOMETER:\t{Truck3.odometer}")
-    print(f"TOTAL MILEAGE:\t\t{mileage}")
+    
 
     print("Make a selection: \n")
     print("1. Locate Single Package")
@@ -270,7 +282,7 @@ def main():
         elif selection == 2:
             displayAll()
         elif selection == 3:
-            print(f"TOTAL MILEAGE:\t\t{mileage}")
+            printStats(TruckList)
         elif selection == 4:
             quit()
 
