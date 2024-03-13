@@ -9,21 +9,8 @@ SPEED_OF_TRUCK = 18
 START_TIME =time(8,0,0)
 
 
-def setAddressID(packages, addresses):
-# set the addressID for each package
-    for package in packages:
-        for address in addresses:
-            if package.address == address:
-                package.addressID = addresses.index(address)
-                break
-
 def distanceBetween(address1, address2, table):
-    return table[address1][address2]
-
-def setStatus(packages):
-    for package in packages:
-        if "Delayed" in package.note or package.id == 9:
-            package.status = Status.DELAYED
+    return table[address1][address2] 
 
 def manualLoadRestricted(trucks, packages, table):
 # MANUALLY LOAD PACKAGES BASED ON RESTRICTIONS. 
@@ -170,8 +157,18 @@ def main():
     packages = data.loadPackageData()
     addresses = data.loadAddressData()
     distanceTable = data.loadDistanceData()
-    setAddressID(packages, addresses)
-    setStatus(packages)
+
+# SET THE ADDRESSID FOR EACH PACKAGE. TO BE USED FOR HASH TABLE KEY
+    for package in packages:
+        for address in addresses:
+            if package.address == address:
+                package.addressID = addresses.index(address)
+                break
+
+# SETS DELAYED STATUS FOR DELAYED PACKAGES
+    for package in packages:
+        if "Delayed" in package.note or package.id == 9:
+            package.status = Status.DELAYED
 
 # CREATE HASH TABLE AND LOAD PACKAGES
     hashTable = HashTable(len(addresses))
