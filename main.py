@@ -172,7 +172,7 @@ def updatePackage9(package, table):
 
     
 def packageStats(time, packages):
-    # print out the current stats of the packages based on the time passed in
+    # FIGURES OUT WHERE THE PACKAGE IS AT THE CHOSEN TIME
     for package in packages:
         if package.departTime > time:
             # package still at hub
@@ -302,11 +302,6 @@ def main():
             printStats(TruckList)
         elif selection == 4:
             quit()
-
-    
-    pass
-
-
 
 
 if __name__ == "__main__":
