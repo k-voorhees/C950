@@ -8,13 +8,6 @@ from datetime import time, datetime, timedelta
 SPEED_OF_TRUCK = 18
 START_TIME =time(8,0,0)
 
-def nearestNeighbor(num, distanceTable):
-    # pointer to the row we are working with
-    row = distanceTable[num]
-    # get of closest neighbor
-    nearest = row.index(min(i for i in row if i > 0))
-
-    return nearest
 
 def setAddressID(packages, addresses):
 # set the addressID for each package
