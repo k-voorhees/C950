@@ -4,7 +4,7 @@ from truck import Truck
 import data
 from datetime import time, datetime, timedelta
 
-# set max speed of truck globally
+# GLOBALS FOR CALCULATIONS
 SPEED_OF_TRUCK = 18
 START_TIME =time(8,0,0)
 
@@ -173,22 +173,22 @@ def updatePackage9(package, table):
     table.insert(package)
 
 def main():
-    # import data from files
+# IMPORT DATA FROM FILES
     packages = data.loadPackageData()
     addresses = data.loadAddressData()
     distanceTable = data.loadDistanceData()
     setAddressID(packages, addresses)
     setStatus(packages)
 
-    # create and load hash table
+# CREATE HASH TABLE AND LOAD PACKAGES
     hashTable = HashTable(len(addresses))
     for package in packages:
         hashTable.insert(package)
-    # create Trucks
+
+# CREATE TRUCK OBJECTS
     Truck1 = Truck(1)
     Truck2 = Truck(2)
     Truck3 = Truck(3)
-
     TruckList = [Truck1, Truck2, Truck3]
 
 # START AT 8:00
