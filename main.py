@@ -32,7 +32,6 @@ def setStatus(packages):
         if "Delayed" in package.note or package.id == 9:
             package.status = Status.DELAYED
 
-
 def manualLoadRestricted(trucks, packages, table):
 # MANUALLY LOAD PACKAGES BASED ON RESTRICTIONS. 
 # NEAREST NEIGHBOR WILL BE USED IN DELIVERY FUNCTION LATER
