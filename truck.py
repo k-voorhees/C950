@@ -8,6 +8,7 @@ class Truck:
         self.clock = time(8,0,0)    # tracks the time of day for each truck
         self.cargo = []
         self.location = 0   # coincide with addressID of package or HUB
+        self.locationHistory = [()]
     
     def load(self, package):
         self.cargo.append(package)
