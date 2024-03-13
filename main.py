@@ -128,11 +128,19 @@ def deliverPackages(truck, dtable, time):
         # "TRAVEL" TO THE NEXT STOP
         currentLocation = nextStop
         truck.location = currentLocation
+
+        # GET SNAP SHOT OF CARGO STATUS AT TIME INTERVAL
+        # TRUCKS ARE DONE BEFORE PART D3 INTERVAL 12:03 - 1:12
+        if truck.clock > time(9,0,0):
+            print(truck.cargoStatus())
+        elif truck.clock > time(10,0,0):
+            print(truck.cargoStatus())
+
         # DELIVER ALL PACKAGES AT THAT LOCATION
         for i in range(len(truck.cargo)):
             package = truck.cargo[i]
             if package is not None and package.addressID is currentLocation:
-                package.status = Status.DELIVERED           # UPDATE DELIVERY STATUS
+                package.status = Status.DELIVERED       # UPDATE DELIVERY STATUS
                 package.deliveryTime = currentTime      # UPDATE DELIVERY TIME
                 incrementCount()
                 truck.cargo[i] = None
