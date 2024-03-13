@@ -7,6 +7,7 @@ from datetime import time, datetime, timedelta
 # GLOBALS FOR CALCULATIONS
 SPEED_OF_TRUCK = 18
 START_TIME =time(8,0,0)
+PACKAGES_DELIVERED = 0
 
 
 def distanceBetween(address1, address2, table):
@@ -40,7 +41,7 @@ def manualLoadRestricted(trucks, packages, table):
                 truck1.load(table.search(item))
                 item.status = Status.EN_ROUTE
     cleanUpHashTable(truck1, table)
-    
+
 #   TRUCK 2
     for package in requires_truck_2:
         if package.status is Status.AT_HUB:
@@ -129,6 +130,7 @@ def deliverPackages(truck, dtable, time):
             if package is not None and package.addressID is currentLocation:
                 package.status = Status.DELIVERED           # UPDATE DELIVERY STATUS
                 package.deliveryTime = currentTime      # UPDATE DELIVERY TIME
+                PACKAGES_DELIVERED+=1
                 truck.cargo[i] = None
 
         # REMOVE CURRENT LOCATION FROM LIST OF STOPS
@@ -239,9 +241,6 @@ def main():
                 if truck.cargo:
                     deliverPackages(truck, distanceTable, truck.clock)
 
-    
-                    
-    pass
 
 if __name__ == "__main__":
     main()
