@@ -25,7 +25,7 @@ def loadPackageData():
     return packages
 
 def loadAddressData():
-    # returns a list of tuples of (address, index)
+    # returns a list of addresses
     data = pd.read_excel('./distance_table.xlsx', skiprows=7)
 
     addressData = []

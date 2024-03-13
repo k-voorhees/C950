@@ -18,6 +18,3 @@ class Truck:
             return True
         
         return False
-    
-    def availableSpace(self):
-        return (MAX_CAPACITY - len(self.cargo))

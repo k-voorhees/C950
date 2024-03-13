@@ -8,10 +8,8 @@ class Package:
         self.city = city
         self.state = state
         self.zip = zip
-        
         self.weight = weight
         self.note = note
-        ##
         self.addressID = None
         self.status = Status.AT_HUB
         self.departTime = datetime.time(0)

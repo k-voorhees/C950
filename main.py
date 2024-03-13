@@ -169,8 +169,6 @@ def updatePackage9(package, table):
     package.addressID = 19
     table.insert(package)
 
-
-    
 def packageStats(time, packages):
     # FIGURES OUT WHERE THE PACKAGE IS AT THE CHOSEN TIME
     for package in packages:
@@ -184,7 +182,8 @@ def packageStats(time, packages):
             # package delivered already
             print(f"Package: {package.id}\tStatus: DELIVERED\tDelivery Time: {package.deliveryTime}")
 
-    pass
+    # PACKAGES ARE MARKED AS EN_ROUTE WHEN PLACED ON TRUCK. PACKAGES ON TRUCK 3 ARE LISTED AS EN_ROUTE EVEN THOUGH TRUCK 3 LOCATION IS STILL THE HUB.
+    # TRUCK 3 DOES NOT LEAVE HUB UNTIL ONE OF THE OTHER TRUCKS ARRIVES BACK
 
 def printStats(trucklist):
     mileage = trucklist[0].odometer+trucklist[1].odometer+trucklist[2].odometer
