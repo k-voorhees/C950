@@ -129,12 +129,6 @@ def deliverPackages(truck, dtable, time):
         currentLocation = nextStop
         truck.location = currentLocation
 
-        # GET SNAP SHOT OF CARGO STATUS AT TIME INTERVAL
-        # TRUCKS ARE DONE BEFORE PART D3 INTERVAL 12:03 - 1:12
-        if truck.clock > time(9,0,0):
-            print(truck.cargoStatus())
-        elif truck.clock > time(10,0,0):
-            print(truck.cargoStatus())
 
         # DELIVER ALL PACKAGES AT THAT LOCATION
         for i in range(len(truck.cargo)):
@@ -143,6 +137,7 @@ def deliverPackages(truck, dtable, time):
                 package.status = Status.DELIVERED       # UPDATE DELIVERY STATUS
                 package.deliveryTime = currentTime      # UPDATE DELIVERY TIME
                 incrementCount()
+                truck.locationHistory.append((package, currentLocation, package.deliveryTime))
                 truck.cargo[i] = None
 
         # REMOVE CURRENT LOCATION FROM LIST OF STOPS
@@ -262,7 +257,28 @@ def main():
     print(f"TRUCK 2 ODOMETER:\t{Truck2.odometer}")
     print(f"TRUCK 3 ODOMETER:\t{Truck3.odometer}")
     print(f"TOTAL MILEAGE:\t\t{mileage}")
+
+    print("Make a selection: \n")
+    print("1. Locate Single Package")
+    print("2. Display All Package Info")
+    print("3. Display statistics")
+    print("4. QUIT")
+    selection = input()
+    while selection is not "4":
+        if selection == 1:
+            singlePackage()
+        elif selection == 2:
+            displayAll()
+        elif selection == 3:
+            print(f"TOTAL MILEAGE:\t\t{mileage}")
+        elif selection == 4:
+            quit()
+
+    
     pass
+
+
+
 
 if __name__ == "__main__":
     main()
