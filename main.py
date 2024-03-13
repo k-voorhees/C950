@@ -17,11 +17,12 @@ def manualLoadRestricted(trucks, packages, table):
 # NEAREST NEIGHBOR WILL BE USED IN DELIVERY FUNCTION LATER
     requires_truck_2 = [packages[2], packages[17], packages[35], packages[37]]
     required_together = [packages[12],packages[13],packages[14],packages[15],packages[18],packages[19]]
+
 # DELAYED PACKAGES WILL BE UPDATED VIA FUNCTION ONCE TIME HITS 9:05 LATER IN PROGRAM
 # PACKAGE 9 - WRONG ADDRESS WILL BE UPDATED LIKE OTHER DELAYED PACKAGES ONCE TIME HITS 10:20
     truck1, truck2, truck3 = trucks[0], trucks[1], trucks[2]
 
-    #   TRUCK 1
+#   TRUCK 1
     # package 15 is first priority. is also in required_together, so load all of those first
     for package in required_together:
         # # load the required package
@@ -39,7 +40,8 @@ def manualLoadRestricted(trucks, packages, table):
                 truck1.load(table.search(item))
                 item.status = Status.EN_ROUTE
     cleanUpHashTable(truck1, table)
-    #   TRUCK 2
+    
+#   TRUCK 2
     for package in requires_truck_2:
         if package.status is Status.AT_HUB:
             truck2.load(table.search(package))
