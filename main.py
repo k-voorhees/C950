@@ -8,7 +8,11 @@ from datetime import time, datetime, timedelta
 SPEED_OF_TRUCK = 18
 START_TIME =time(8,0,0)
 PACKAGES_DELIVERED = 0
+TIME_COMPLETED=time(0,0,0)
 
+def incrementCount():
+    global PACKAGES_DELIVERED
+    PACKAGES_DELIVERED+=1
 
 def distanceBetween(address1, address2, table):
     return table[address1][address2] 
@@ -130,7 +134,7 @@ def deliverPackages(truck, dtable, time):
             if package is not None and package.addressID is currentLocation:
                 package.status = Status.DELIVERED           # UPDATE DELIVERY STATUS
                 package.deliveryTime = currentTime      # UPDATE DELIVERY TIME
-                PACKAGES_DELIVERED+=1
+                incrementCount()
                 truck.cargo[i] = None
 
         # REMOVE CURRENT LOCATION FROM LIST OF STOPS
@@ -240,7 +244,17 @@ def main():
                 truck.clock = time(10,25,0)
                 if truck.cargo:
                     deliverPackages(truck, distanceTable, truck.clock)
+                    TIME_COMPLETED=truck.clock
 
+# DISPLAY COMPLETION RESULTS
+    mileage = Truck1.odometer+Truck2.odometer+Truck2.odometer
+    print(f"PACKAGES DELIVERED:\t{PACKAGES_DELIVERED}")
+    print(f"TIME COMPLETED:\t\t{TIME_COMPLETED}")
+    print(f"TRUCK 1 ODOMETER:\t{Truck1.odometer}")
+    print(f"TRUCK 2 ODOMETER:\t{Truck2.odometer}")
+    print(f"TRUCK 3 ODOMETER:\t{Truck3.odometer}")
+    print(f"TOTAL MILEAGE:\t\t{mileage}")
+    pass
 
 if __name__ == "__main__":
     main()
