@@ -213,8 +213,8 @@ def main():
 # DELIVER FIRST PACKAGES
 # TRUCK 1 AND 2 LEAVE HUB AT 8:00
     # TRUCK.CLOCK WILL TRACK THE TIME OF DAY FOR EACH TRUCK
-    deliverPackages(Truck1, distanceTable, currentTime)
-    deliverPackages(Truck2, distanceTable, currentTime)
+    deliverPackages(Truck1, distanceTable, Truck1.clock)
+    deliverPackages(Truck2, distanceTable, Truck2.clock)
     # TRUCKS RETURN TO HUB AFTER DELIVERY
     
 # TIME HITS 9:05 WHILE THEY ARE DELIVERING
