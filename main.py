@@ -187,13 +187,13 @@ def packageStats(time, packages):
     for package in packages:
         if package.departTime > time:
             # package still at hub
-            print(f"Package: {package.id}\nAddress: {package.address}\nStatus: AT_HUB\n")
+            print(f"Package: {package.id}  Address: {package.address}\tStatus: AT_HUB")
         elif package.departTime < time and time < package.deliveryTime:
             # package en route
-            print(f"Package: {package.id}\nAddress: {package.address}\nStatus: EN_ROUTE\nTruck: {package.truckID}\n")
+            print(f"Package: {package.id}  Address: {package.address}\tStatus: EN_ROUTE\tTruck: {package.truckID}")
         elif time > package.deliveryTime:
             # package delivered already
-            print(f"Package: {package.id}\nAddress: {package.address}\nStatus: DELIVERED\nTruck: {package.truckID}\nDeadline: {package.deadline}\tDelivery Time: {package.deliveryTime}\n")
+            print(f"Package: {package.id}  Address: {package.address}\tStatus: DELIVERED\tTruck: {package.truckID}\tDeadline: {package.deadline}\tDelivery Time: {package.deliveryTime}")
 
     # PACKAGES ARE MARKED AS EN_ROUTE WHEN PLACED ON TRUCK. PACKAGES ON TRUCK 3 ARE LISTED AS EN_ROUTE EVEN THOUGH TRUCK 3 LOCATION IS STILL THE HUB.
     # TRUCK 3 DOES NOT LEAVE HUB UNTIL ONE OF THE OTHER TRUCKS ARRIVES BACK
