@@ -14,6 +14,7 @@ class Package:
         self.status = Status.AT_HUB
         self.departTime = datetime.time(0)
         self.deliveryTime = datetime.time(0)
+        self.truckID = None
 
         if type(deadline) is datetime.datetime:
             self.deadline = deadline.time()
