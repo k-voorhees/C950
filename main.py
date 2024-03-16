@@ -37,6 +37,7 @@ def manualLoadRestricted(trucks, packages, table):
             truck1.load(table.search(package))      # load the package onto the truck
             package.status = Status.EN_ROUTE        # update Status
             package.departTime = (START_TIME)
+            package.truckID = truck1.id
     cleanUpHashTable(truck1, table)
     
     # load all of the packages that are also located at the same stops as in required_together[]
@@ -48,6 +49,7 @@ def manualLoadRestricted(trucks, packages, table):
                 truck1.load(table.search(item))
                 item.status = Status.EN_ROUTE
                 item.departTime = (START_TIME)
+                item.truckID = truck1.id
 
     cleanUpHashTable(truck1, table)
 
@@ -57,6 +59,7 @@ def manualLoadRestricted(trucks, packages, table):
             truck2.load(table.search(package))
             package.status = Status.EN_ROUTE
             package.departTime = (START_TIME)
+            package.truckID = truck2.id
     cleanUpHashTable(truck1, table)
 
     # load all of the packages that are also located at the same stops as in required_together[]
@@ -68,6 +71,7 @@ def manualLoadRestricted(trucks, packages, table):
                 truck2.load(table.search(item))
                 item.status = Status.EN_ROUTE
                 item.departTime = START_TIME
+                item.truckID = truck2.id
     
     cleanUpHashTable(truck2, table)
 
@@ -81,6 +85,7 @@ def fillTruck(truck, table):
                 truck.load(table.search(package))
                 package.status = Status.EN_ROUTE
                 package.departTime = truck.clock
+                package.truckID = truck.id
 
         i+=1
     cleanUpHashTable(truck, table)
@@ -124,7 +129,13 @@ def deliverPackages(truck, dtable, time):
             distances.append(distanceBetween(currentLocation, stop, dtable))
 
         # NEXT STOP WILL BE THE CLOSEST ADDRESS OF ALL DROP OFF POINTS
-        nextStop = stops[distances.index(min(distances))]
+        # Packages 6 and 25 are due at 10:30 but delayed until after 9:05 Manually handle delivering these first
+        if truck.id == 3 and 24 in stops:
+            nextStop = 24
+        elif truck.id == 3 and 13 in stops:
+            nextStop = 13
+        else:
+            nextStop = stops[distances.index(min(distances))]
 
         # INCREASE TRUCK MILAGE
         distanceTravelled = distanceBetween(currentLocation, nextStop, dtable)
@@ -176,13 +187,13 @@ def packageStats(time, packages):
     for package in packages:
         if package.departTime > time:
             # package still at hub
-            print(f"Package: {package.id}\tStatus: AT_HUB")
+            print(f"Package: {package.id}\nAddress: {package.address}\nStatus: AT_HUB\n")
         elif package.departTime < time and time < package.deliveryTime:
             # package en route
-            print(f"Package: {package.id}\tStatus: EN_ROUTE")
+            print(f"Package: {package.id}\nAddress: {package.address}\nStatus: EN_ROUTE\nTruck: {package.truckID}\n")
         elif time > package.deliveryTime:
             # package delivered already
-            print(f"Package: {package.id}\tStatus: DELIVERED\tDelivery Time: {package.deliveryTime}")
+            print(f"Package: {package.id}\nAddress: {package.address}\nStatus: DELIVERED\nTruck: {package.truckID}\nDeadline: {package.deadline}\tDelivery Time: {package.deliveryTime}\n")
 
     # PACKAGES ARE MARKED AS EN_ROUTE WHEN PLACED ON TRUCK. PACKAGES ON TRUCK 3 ARE LISTED AS EN_ROUTE EVEN THOUGH TRUCK 3 LOCATION IS STILL THE HUB.
     # TRUCK 3 DOES NOT LEAVE HUB UNTIL ONE OF THE OTHER TRUCKS ARRIVES BACK
